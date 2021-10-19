@@ -1,0 +1,112 @@
+<div class="animated fadeIn">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<strong>Thông tin người dùng</strong>
+				</div>
+				<div class="card-block">
+					<tabset>
+						<tab heading="Cập nhật thông tin" id="tab1" (select)="onSelect($event)">
+							<form #updateInfoForm="ngForm">
+                                <div class="form-group row">
+                                    <label class="col-md-2 header-text" for="text-input">Hình đại diện: </label>
+                                    <div class="col-md-10">
+                                        <div *ngIf="avatarUrlControl.value && avatarUrlControl.valid" class="displayImage" [style.backgroundImage]="'url('+ avatarUrl +')'">
+                                        </div>
+                                        <input id="fileAvatar" type="file" (change)="displayPhoto($event)" #avatarUrlControl="ngModel" #fileUploader [(ngModel)]="avatarUrl" name="avatarUrl" class="hidden" [placeholder]="'Nhập url'">
+                                        <label class="btn btn-info label-avatar" for="fileAvatar" *ngIf="!loadingUploadAvatar">
+                                            <i class="fa fa-picture-o"></i> Đăng hình
+                                        </label>
+                                        <label *ngIf="loadingUploadAvatar" class="btn btn-info label-avatar" for="fileAvatar" >
+                                            <i class="fa fa-cloud-upload" aria-hidden="true"></i> Đang tải hình ảnh
+                                            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 header-text" for="text-input">Họ: </label>
+                                    <div class="col-md-10">
+                                        <input type="text" #firstNameControl="ngModel" [(ngModel)]="firstName" name="firstName" class="form-control input-control" [placeholder]="'Nhập họ'" required>
+                                        <small *ngIf="firstNameControl.errors?.required" class="text-muted danger">
+                                        (Không được bỏ trống)
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 header-text" for="text-input">Tên: </label>
+                                    <div class="col-md-10">
+                                        <input type="text" #lastNameControl="ngModel" [(ngModel)]="lastName" name="lastName" class="form-control input-control" [placeholder]="'Nhập tên'" required>
+                                        <small *ngIf="lastNameControl.errors?.required" class="text-muted danger">
+                                        (Không được bỏ trống)
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 header-text" for="text-input">Email: </label>
+                                    <div class="col-md-10">
+                                        <input type="email" #emailControl="ngModel" [(ngModel)]="email" name="email" class="form-control input-control" [placeholder]="'Nhập email'" required>
+                                        <small *ngIf="emailControl.errors?.required" class="text-muted danger">
+                                        (Không được bỏ trống)
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 header-text" for="text-input">Phòng ban: </label>
+                                    <div class="col-md-10">
+                                        <select #departmentIDControl="ngModel" [(ngModel)]="departmentID" name="departmentID" class="form-control input-control">
+                                            <option value=null [selected]="true">Chọn phòng ban</option>
+                                            <option [value]="department.id" *ngFor="let department of listDepartments">{{department.name}}</option>
+                                        </select>
+                                        <small *ngIf="departmentIDControl.value == null" class="text-muted danger">
+                                            (Vui lòng chọn phòng ban)
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                            </form>
+						</tab>
+						<tab heading="Đổi mật khẩu" (select)="onSelect($event)" id="tab2">
+							<form #changePasswordForm="ngForm">
+                                <div class="form-group row">
+                                    <label class="col-md-2 header-text" for="text-input">Mật khẩu cũ: </label>
+                                    <div class="col-md-10">
+                                        <input [type]="showOldPassword ? 'text' : 'password'" #oldPasswordControl="ngModel" [(ngModel)]="oldPassword" name="oldPassword" class="form-control input-control" [placeholder]="'Nhập mật khẩu cũ'" required>
+                                        <i class="fa fa-eye show-password" aria-hidden="true" (click)="showPassword($event)" id="old-password"></i>
+                                        <small *ngIf="oldPasswordControl.errors?.required" class="text-muted danger">
+                                        (Không được bỏ trống)
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 header-text" for="text-input">Mật khẩu mới: </label>
+                                    <div class="col-md-10">
+                                        <input [type]="showNewPassword ? 'text' : 'password'" #newPasswordControl="ngModel" [(ngModel)]="newPassword" name="newPassword" class="form-control input-control" [placeholder]="'Nhập mật khẩu mới'" required>
+                                        <i class="fa fa-eye show-password" aria-hidden="true" (click)="showPassword($event) "id="new-password"></i>
+                                        <small *ngIf="newPasswordControl.errors?.required" class="text-muted danger">
+                                        (Không được bỏ trống)
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 header-text" for="text-input">Nhập lại mật khẩu mới: </label>
+                                    <div class="col-md-10">
+                                        <input [type]="showNewPasswordRepeat ? 'text' : 'password'" #newPasswordRepeatControl="ngModel" [(ngModel)]="newPasswordRepeat" name="newPasswordRepeat" class="form-control input-control" [placeholder]="'Nhập lại mật khẩu mới'" required>
+                                        <i class="fa fa-eye show-password" aria-hidden="true" (click)="showPassword($event)" id="new-password-repeat"></i>
+                                        <small *ngIf="newPasswordRepeatControl.errors?.required" class="text-muted danger">
+                                        (Không được bỏ trống)
+                                        </small>
+                                    </div>
+                                </div>
+                            </form>
+						</tab>
+					</tabset>
+				</div>
+				<div class="card-footer">
+                    <button *ngIf="changeTab" (click)="changePassword(changePasswordForm)" type="button" class="btn btn-primary"  data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Đổi mật khẩu</button>
+                    <button *ngIf="!changeTab" (click)="updateInfo(updateInfoForm)" type="button" class="btn btn-primary"  data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Cập nhật thông tin</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

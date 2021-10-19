@@ -1,0 +1,50 @@
+h3 {
+  margin: 0;
+  padding-top: 5px;
+}
+
+.custom-fa {
+  font-size: 20px;
+  padding: 4px;
+}
+
+.material-icons {
+  padding-bottom: 5px;
+}
+
+/deep/ data-table table {
+  box-shadow: none !important;
+}
+
+/deep/ data-table .column-header span {
+  font-size: 0.8rem !important;
+}
+
+/deep/ data-table span .number-style {
+  text-align: right;
+}
+
+/deep/ table td,
+/deep/ table th {
+  text-align: center;
+}
+
+.search-bar {
+  width: 100%;
+  padding-bottom: 1rem;
+}
+
+.search-bar p {
+  width: 120px;
+}
+
+/deep/ data-table .refresh-button {
+  display: none;
+}
+
+.search-bar input{
+  height: 35px;
+}
+/deep/ .input-group input+.input-group-addon{
+  margin-left: 0;
+}

@@ -1,0 +1,38 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Thông tin</strong>
+                </div>
+                <div class="card-block">
+                    <form #itemFrm="ngForm">
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Tên chức vụ và quyền</label>
+                            <div class="col-md-10">
+                                <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Nhập tên chức vụ và quyền'" required disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="select">Danh sách API</label>
+                            <div class="col-md-10">
+                                <angular2-multiselect [data]="listApis" 
+                                    [(ngModel)]="apis" 
+                                    [settings]="settings" 
+                                    (onSelect)="onItemSelect($event)"
+                                    (onDeSelect)="OnItemDeSelect($event)" 
+                                    (onSelectAll)="onSelectAll($event)" 
+                                    (onDeSelectAll)="onDeSelectAll($event)" name="apis" *ngIf="loadDataDone">
+                                </angular2-multiselect>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Cập nhật và thoát</button>
+                </div>
+            </div>
+        </div>
+        <!--/.col-->
+    </div>
+</div>

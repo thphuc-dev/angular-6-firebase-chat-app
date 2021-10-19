@@ -1,0 +1,28 @@
+<div id="fundo" class="absolute-center-container" *ngIf="!isLoaded">
+    <form #loginForm="ngForm"
+        (keyup)="keyDownFunction($event,loginForm)" id="login">
+        <img id="logo" src="../../assets/img/_thumb_10856.png" />
+        <h1 id="login-title">ĐĂNG NHẬP HỆ THỐNG</h1>
+        <div class="input-row">
+            <i class="input-icon material-icons md-36">perm_identity</i>
+            <input #usernameControl="ngModel" placeholder="Username" [(ngModel)]="username" name="username" maxlength="255" type="text"
+                tabindex="2" required>
+        </div>
+        <div class="input-row">
+            <i class="input-icon material-icons md-36">lock</i>
+            <input #passwordControl="ngModel" placeholder="Password" [(ngModel)]="password" name="password" maxlength="70" [type]="showpassword ? 'text' : 'password'" required id="password">
+            <i class="fa fa-eye" aria-hidden="true" style="font-size: 20px;color: #b2b2b2;cursor: pointer;" (click)="showPassword()" *ngIf="showpassword"></i>
+            <i class="fa fa-eye-slash" aria-hidden="true" style="font-size: 20px;color: #b2b2b2;cursor: pointer;" (click)="showPassword()" *ngIf="!showpassword"></i>
+        </div>
+        <button type="button" class="btn btn-login" (click)="signIn(loginForm)">
+            <i [@fade]="submitting?'visible':'invisible'" [hidden]='!submitting' class="fa fa-circle-o-notch fa-spin loading-spinner"
+                style="font-size:24px"></i>
+            <span [@fade]="submitting?'invisible':'visible'" [hidden]='submitting'>Đăng nhập</span>
+        </button>
+    </form>
+</div>
+<div id="loader-wrapper" *ngIf="isLoaded">
+    <div id="loader"></div>
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+</div>

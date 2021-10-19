@@ -1,0 +1,28 @@
+<div class="animated fadeIn">
+	<div class="row">
+		<h4 class="col-7">Danh sách tỉnh, thành phố thuộc quốc gia {{nationality}}</h4>
+		<div class="col-5">
+			<button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm tỉnh, thành phố</button>
+			<button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa tỉnh, thành phố</button>
+		</div>
+	</div>
+	<div class="table-wrapper">
+		<data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true" [substituteRows]="false"
+		[selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
+		<data-table-column property="name" header="Tên tỉnh, thành phố" [sortable]="true">
+		</data-table-column>
+		<data-table-column header="Danh sách quận, huyện">
+			<ng-template #dataTableCell let-item="item">
+				<a  routerLinkActive="active" routerLink="../../region/{{item.id}}/district/list">
+					Danh sách quận, huyện
+				</a>
+			</ng-template>
+		</data-table-column>
+		<data-table-column header="Thao tác">
+			<ng-template #dataTableCell let-item="item">
+				<button (click)="editItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-edit"></i></button>
+			</ng-template>
+		</data-table-column>
+		</data-table>
+	</div>
+</div>

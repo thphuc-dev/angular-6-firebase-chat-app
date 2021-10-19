@@ -1,0 +1,117 @@
+<div class="animated fadeIn">
+	<div class="row search-bar">
+        <h3 class="col-6">Xếp phòng</h3>
+            <div class="col-md-10">
+                <form #searchForm="ngForm">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="text" class="input-control form-control" placeholder="Số CMND" #idcardControl="ngModel" [(ngModel)]="idcard" name="idcard">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="input-control form-control" placeholder="Họ" #lastNameControl="ngModel" [(ngModel)]="lastName" name="lastName">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="input-control form-control" placeholder="Tên" #firstNameControl="ngModel" [(ngModel)]="firstName" name="firstName">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col-md-12">
+                            <div class="row input-school">
+                                <div class="col">
+                                    <select #schoolControl="ngModel" [(ngModel)]="school" name="school" class="form-control input-control">
+                                        <option value=null [selected]="true" disabled>Trường</option>
+                                        <option [value]="school.name" *ngFor="let school of listSchools">
+                                            {{school.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="input-control form-control" placeholder="Năm bắt đầu" #schoolYearStartControl="ngModel" [(ngModel)]="schoolYearStart" name="schoolYearStart">
+                                </div>
+                                <div class="col">
+                                    <select #verifiedControl="ngModel" [(ngModel)]="verified" name="verified" class="form-control input-control">
+                                        <option value=null [selected]="true" disabled>Trạng thái hồ sơ</option>
+                                        <option [value]="true">Đã duyệt</option>
+                                        <option [value]="false">Chưa duyệt</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2 search-page-button">
+                <div class="row" style="margin-bottom: 6px">
+                    <div class="col">
+                        <button (click)="searchStudent(searchForm)" class="btn btn-md btn-ladda button-default-primary ml-h" style="width: 100%;" ><i class="fa fa-search"></i>Tìm kiếm</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-md button-default-info ml-auto" (click)="reservationForStudent()" [disabled]="roomsTable.selectedRow === undefined && studentsTable.selectedRow === undefined"><i class="fa fa-check-square-o" aria-hidden="true"></i> Xếp phòng</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="table-wrapper">
+                <data-table id="persons-grid" #studentsTable indexColumnHeader="STT" [itemCount]="itemCount" [items]="listStudentsRegisterRoomType | async" (reload)="reloadItems($event)" [pagination]="true" [header]="false" [indexColumn]="true" [substituteRows]="false" [selectColumn]="true" [showReloading]="false" [selectOnRowClick]="true" (rowClick)="rowStudentClick($event)" (rowDoubleClick)="rowStudentDoubleClick($event)" [multiSelect]="false" selectColumnHeader="Chọn">
+                    <data-table-column header="Tên sinh viên">
+                        <ng-template #dataTableCell let-item="item">
+                            {{item.lastName}} {{item.firstName}}
+                        </ng-template>
+                    </data-table-column>
+                    <data-table-column header="Tên đăng nhập">
+                        <ng-template #dataTableCell let-item="item">
+                            {{item.userName}}
+                        </ng-template>
+                    </data-table-column>
+                    <data-table-column header="Ngày sinh">
+                        <ng-template #dataTableCell let-item="item">
+                            {{item.dateOfBirth | utcDate | date:'dd/MM/yyyy'}}
+                        </ng-template>
+                    </data-table-column>
+                    <data-table-column header="Loại phòng">
+                        <ng-template #dataTableCell let-item="item">
+                            {{item.roomType}}
+                        </ng-template>
+                    </data-table-column>
+                    <data-table-column header="Ngày đăng ký">
+                        <ng-template #dataTableCell let-item="item">
+                            {{item.createdDate | utcDate | date:'dd/MM/yyyy'}}
+                        </ng-template>
+                    </data-table-column>
+                </data-table>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="table-wrapper">
+                <data-table id="persons-grid" #roomsTable indexColumnHeader="STT" [items]="listRoomOfAllBuildings" [pagination]="false" [header]="false" [indexColumn]="true" [substituteRows]="false" [showReloading]="false" selectColumnHeader="Chọn" [selectColumn]="true" [multiSelect]="false" (rowClick)="rowRoomClick($event)" (rowDoubleClick)="rowRoomDoubleClick($event)">
+                    <data-table-column header="Phòng">
+                        <ng-template #dataTableCell let-item="item">
+                            {{item.name}}, {{item.building.name}}
+                        </ng-template>
+                    </data-table-column>
+                    <data-table-column header="Trạng thái">
+                        <ng-template #dataTableCell let-item="item">
+                            <span *ngIf="item.currentCapacity == 0">Phòng trống</span>
+                            <span *ngIf="item.gender == 'MALE' && item.currentCapacity != 0">Phòng nam</span>
+                            <span *ngIf="item.gender == 'FEMALE' && item.currentCapacity != 0">Phòng nữ</span>
+                        </ng-template>
+                    </data-table-column>
+                    <data-table-column header="Trống">
+                        <ng-template #dataTableCell let-item="item">
+                            {{item.capacity - item.currentCapacity }}
+                        </ng-template>
+                    </data-table-column>
+                </data-table>
+            </div>
+        </div>
+    </div>
+	
+</div>

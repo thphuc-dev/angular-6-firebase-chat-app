@@ -1,0 +1,58 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Thông tin</strong>
+                </div>
+                <div class="card-block">
+                    <form #itemFrm="ngForm">
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Họ</label>
+                            <div class="col-md-10">
+                                <input type="text" #lastNameControl="ngModel" [(ngModel)]="lastName" name="lastName" class="form-control input-control" [placeholder]="'Nhập họ'" required readonly>
+                                <small *ngIf="lastNameControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Tên</label>
+                            <div class="col-md-10">
+                                <input type="text" #firstNameControl="ngModel" [(ngModel)]="firstName" name="firstName" class="form-control input-control" [placeholder]="'Nhập tên'" required readonly>
+                                <small *ngIf="firstNameControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Email</label>
+                            <div class="col-md-10">
+                                <input type="email" #emailControl="ngModel" [(ngModel)]="email" name="email" class="form-control input-control" [placeholder]="'Nhập email'" required readonly>
+                                <small *ngIf="emailControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="select">Phòng ban</label>
+                            <div class="col-md-10">
+                                <select #departmentIDControl="ngModel" [(ngModel)]="departmentID" name="departmentID" class="form-control input-control" disabled>
+                                    <option value=null [selected]="true">Chọn phòng ban</option>
+                                    <option [value]="department.id" *ngFor="let department of listDepartments">{{department.name}}</option>
+                                </select>
+                                <small *ngIf="departmentIDControl.value == null" class="text-muted danger">
+                                    (Vui lòng chọn phòng ban)
+                                </small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <button (click)="backToList()" class="btn btn-success ml-auto"><i class="fa fa-arrow-left" aria-hidden="true"></i> Quay lại</button>
+                </div>
+            </div>
+        </div>
+        <!--/.col-->
+    </div>
+</div>

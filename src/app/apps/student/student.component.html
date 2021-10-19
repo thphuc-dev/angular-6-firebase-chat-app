@@ -1,0 +1,102 @@
+<div class="animated fadeIn">
+	<div class="row">
+		<h3 class="col-6">Danh sách sinh viên</h3>
+		<div class="col-6">
+			<button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm sinh
+				viên</button>
+			<button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i
+				 class="fa fa-trash"></i>Xóa sinh viên</button>
+		</div>
+	</div>
+	<div class="table-wrapper">
+		<div class="search-bar">
+			<div class="col-md-9">
+				<form #searchForm="ngForm">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col">
+									<input type="text" class="input-control form-control" placeholder="Tên đăng nhập" #usernameControl="ngModel"
+									 [(ngModel)]="username" name="username">
+								</div>
+								<div class="col">
+									<input type="text" class="input-control form-control" placeholder="Họ" #lastNameControl="ngModel" [(ngModel)]="lastName"
+									 name="lastName">
+								</div>
+								<div class="col">
+									<input type="text" class="input-control form-control" placeholder="Tên" #firstNameControl="ngModel"
+									 [(ngModel)]="firstName" name="firstName">
+								</div>
+								<div class="col">
+									<select #verifiedControl="ngModel" [(ngModel)]="verified" name="verified" class="form-control input-control">
+										<option value=null [selected]="true" disabled>Trạng thái</option>
+										<option value="true">Hồ sơ đã duyệt</option>
+										<option value="false">Hồ sơ chưa duyệt</option>
+									</select>
+								</div>
+							</div>
+							<div class="row" style="margin-top: 10px">
+								<div class="col">
+									<select #schoolControl="ngModel" [(ngModel)]="school" name="school" class="form-control input-control"
+									 (change)="getListMajors($event)">
+										<option value=null [selected]="true" disabled>Trường</option>
+										<option [value]="school.name" *ngFor="let school of listSchools">
+											{{school.name === null ? 'Tất cả' : school.name}}
+										</option>
+									</select>
+								</div>
+								<div class="col">
+									<input type="text" class="input-control form-control" placeholder="Năm bắt đầu" #schoolYearStartControl="ngModel" [(ngModel)]="schoolYearStart"
+									 name="schoolYearStart">
+								</div>
+								<div class="col">
+									<input type="text" class="input-control form-control" placeholder="Năm kết thúc" #schoolYearEndControl="ngModel" [(ngModel)]="schoolYearEnd"
+									 name="schoolYearEnd">
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-3 search-page-button">
+				<div class="row">
+					<div class="col">
+						<button (click)="searchStudent(searchForm)" class="btn btn-md btn-ladda button-default-primary ml-h" style="width: 100%;"
+						 data-style="expand-right" [ladda]='submitting'><i class="fa fa-search"></i>Tìm kiếm</button>
+					</div>
+				</div>
+				<!-- <div class="row" style="margin-top: 6px">
+					<div class="col" dropdown>
+						<button class="btn btn-md button-default-primary ml-h dropdown-toggle" [disabled]="!itemsTable.selectedRows.length"
+						 id="button-basic" dropdownToggle type="button" ria-controls="dropdown-basic">
+							Xác minh hồ sơ <span class="caret"></span>
+						</button>
+						<ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+							<li role="menuitem"><a class="dropdown-item" (click)="verifiedItem(false)">Xác minh</a></li>
+							<li role="menuitem"><a class="dropdown-item" (click)="verifiedItem(true)">Huỷ xác minh</a></li>
+						</ul>
+					</div>
+				</div> -->
+			</div>
+		</div>
+		<data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount"
+		 (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true"
+		 [substituteRows]="false" [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)"
+		 (rowDoubleClick)="rowDoubleClick($event)">
+			<data-table-column property="username" header="Tên đăng nhập">
+			</data-table-column>
+			<data-table-column property="lastName" header="Họ" [sortable]="true">
+			</data-table-column>
+			<data-table-column property="firstName" header="Tên" [sortable]="true">
+			</data-table-column>
+			<data-table-column property="mobile" header="Điện thoại">
+			</data-table-column>
+			<data-table-column header="Thao tác">
+				<ng-template #dataTableCell let-item="item">
+					<button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow" style="font-size: 10px;text-transform: inherit;"><i
+						 class="fa fa-eye"></i> Chi tiết</button>
+				</ng-template>
+			</data-table-column>
+		</data-table>
+	</div>
+</div>

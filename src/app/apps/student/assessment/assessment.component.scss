@@ -1,0 +1,98 @@
+h3 {
+  margin: 0;
+  padding-top: 5px;
+}
+
+.custom-fa {
+  font-size: 20px;
+  padding: 4px;
+}
+
+.material-icons {
+  padding-bottom: 5px;
+}
+
+/deep/ data-table table {
+  box-shadow: none !important;
+}
+
+/deep/ data-table .column-header span {
+  font-size: 0.8rem !important;
+}
+
+/deep/ data-table span .number-style {
+  text-align: right;
+}
+
+/deep/ table td,
+/deep/ table th {
+  text-align: center;
+}
+
+.search-bar {
+  width: 100%;
+  padding-bottom: 1rem;
+}
+
+.search-bar p {
+  width: 120px;
+}
+
+/deep/ data-table .refresh-button {
+  display: none;
+}
+
+.search-bar input{
+  height: 35px;
+}
+/deep/ .input-group input+.input-group-addon{
+  margin-left: 0;
+}
+.button-default-success {
+  float: right;
+  color: #fff;
+  border: 1px solid #4cae4c;
+  background-color: #5cb85c;
+  border-radius: 5px;
+  text-transform: none !important;
+  i {
+    margin-right: 5px;
+  }
+  transition: all 0.3s ease;
+  &:hover {
+    border-color: #398439;
+    background-color: #449d44;
+    color: #fff;
+  }
+  &:focus {
+    border-color: #398439;
+    background-color: #449d44;
+    color: #fff;
+  }
+}
+.modal-content .modal-header, {
+  padding: 15px;
+  border-bottom: 1px solid #e1e6ef;
+}
+.modal-header button{
+  border: none;
+}
+.modal-content .modal-footer{
+  padding: 15px;
+  border-top: 1px solid #e1e6ef;
+}
+.header-text{
+  color: #272c33;
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.button-default-primary {
+  background-color: #37baea;
+  color: #FAFAFA;
+  border: 1px solid #37baea;
+}

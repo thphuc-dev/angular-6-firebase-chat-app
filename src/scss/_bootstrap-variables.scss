@@ -1,0 +1,138 @@
+// Bootstrap overrides
+
+// Colors
+//
+// Grayscale and brand colors for use across Bootstrap.
+$bluegrey-white:          #ECEFF1; //50
+$bluegrey-lightest:       #fff; //100
+$bluegrey-lighter:        #B0BEC5; //200
+$bluegrey-light:          #fff; //300
+$bluegrey-mild:           #78909C; //400
+$bluegrey:                #607D8B; //500
+$bluegrey-dark:           #546E7A;
+$bluegrey-darker:         #2b3b83;
+$bluegrey-darkest:        #1c2756;
+$bluegrey-black:          #263238;
+
+
+$grey-white:                #FAFAFA; //50
+$grey-lightest:             #F5F5F5; //100
+$grey-lighter:              #EEEEEE; //200
+$grey-light:                #E0E0E0; //400
+$grey-mild:                 #BDBDBD; //400
+$grey:                      #9E9E9E; //500
+$grey-dark:                 #757575;
+$grey-darker:               #616161;
+$grey-darkest:              #424242;
+$grey-black:                #212121;
+
+
+$gray-dark:                 #384042;
+$gray:                      #9faecb; //#5d76a8;
+$gray-light:                #c0cadd; //#9faecb;
+$gray-lighter:              #e1e6ef; //#c0cadd
+$gray-lightest:             #f9f9fa; //#e1e6ef
+
+$brand-primary:             #2ba8d6;
+$brand-success:             #79c447;
+$brand-info:                #67c2ef;
+$brand-warning:             #FF6F00;
+$brand-danger:              #FF1744;
+
+$brand-light:               #64B5F6;
+$brand-dark:                #1976D2;
+$brand-danger-light:        #ff6482;
+
+$color-red:                 #FF1744;
+$color-pink:                #F50057;
+$color-purple:              #D500F9;
+$color-deep-purple:         #651FFF;
+$color-indigo:              #3D5AFE;
+$color-blue:                #2979FF;
+$color-light-blue:          #00B0FF;
+$color-cyan:                #00E5FF;
+$color-teal:                #1DE9B6;
+$color-green:               #00E676;
+$color-yellow:              #FFEA00;
+$color-orange:              #FF9100;
+$color-deep-orange:         #FF3D00;
+$color-brown:               #795548;
+
+// Options
+//
+// Quickly modify global styling by enabling or disabling optional features.
+
+$enable-transitions:        true;
+$enable-rounded:            false;
+
+// Spacing
+//
+// Control the default styling of most Bootstrap elements by modifying these
+// variables. Mostly focused on spacing.
+
+$spacer:   1rem !default;
+$spacer-x: $spacer !default;
+$spacer-y: $spacer !default;
+$spacers: (
+  q: (
+    x:   ($spacer-x * 0.25),
+    y:   ($spacer-y * 0.25)
+  ),
+  h: (
+    x:   ($spacer-x * 0.5),
+    y:   ($spacer-y * 0.5)
+  ),
+  0: (
+    x:   0,
+    y:   0
+  ),
+  1: (
+    x:   $spacer-x,
+    y:   $spacer-y
+  ),
+  2: (
+    x:   ($spacer-x * 1.5),
+    y:   ($spacer-y * 1.5)
+  ),
+  3: (
+    x:   ($spacer-x * 3),
+    y:   ($spacer-y * 3)
+  )
+);
+
+// Body
+//
+// Settings for the `<body>` element.
+
+$body-bg:                    #f2f4f8;
+$body-color:                 #374767;
+
+// Typography
+//
+// Font, line-height, and color for body text, headings, and more.
+
+$font-size-base:             0.875rem;
+
+// Breadcrumbs
+
+$breadcrumb-padding-x:          2rem !default;
+$breadcrumb-bg:                 transparent;
+
+// Cards
+
+$card-border-color:        $gray-lighter;
+$card-cap-bg:              $gray-lightest;
+
+// Dropdowns
+
+$dropdown-padding-y:             0;
+$dropdown-border-color:          $gray-lighter;
+$dropdown-divider-bg:            $gray-lightest;
+
+// Progress bars
+
+$progress-bg:                    darken($gray-lightest,1%);
+
+// Forms
+
+$input-border-color:             $gray-lighter;

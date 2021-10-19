@@ -1,0 +1,290 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Thông tin sinh viên</strong>
+                    <button class="btn btn-md button-default-info ml-auto" (click)="verifiedStudent(id)" *ngIf="isEditable"><i
+                            class="fa fa-check-circle-o"></i>Duyệt hồ sơ</button>
+                    <button class="btn btn-md button-default-info ml-auto" (click)="verifiedStudent(id)" *ngIf="!isEditable"><i
+                            class="fa fa-check-circle-o"></i>Huỷ duyệt hồ sơ</button>
+                    <button class="btn btn-md button-default-info ml-auto" (click)="exportPDF(id)" style="margin-right: 10px;"><i
+                            class="fa fa-print"></i>In hồ sơ</button>
+                </div>
+                <div class="card-block">
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Trạng thái hồ sơ</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="editable" name="editable" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Avatar</label>
+                        <div class="col-md-10">
+                            <img style="width:auto;height:80px;margin-top:0.2rem;" [src]="avatarUrl" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Họ</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="lastName" name="lastName" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Tên</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="firstName" name="firstName" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Giới tính</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="gender" name="gender" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Ngày sinh</label>
+                        <div class="col-md-10">
+                            <input type="text" [ngModel]="dateOfBirth | utcDate | date:'dd/MM/yyyy'" name="dateOfBirth"
+                                class="form-control input-control" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Số CMND</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="idcard" name="idcard" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Toà nhà</label>
+                        <div class="col-md-10">
+                            <input type="text" [ngModel]="building" name="building" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Phòng ở</label>
+                        <div class="col-md-10">
+                            <input type="text" [ngModel]="room" name="room" class="form-control input-control" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Loại phòng</label>
+                        <div class="col-md-10">
+                            <input type="text" [ngModel]="roomType" name="roomType" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header" style="border-top: 1px solid #e1e6ef;">
+                    <strong>Thông tin ảnh CMND</strong>
+                </div>
+                <div class="card-block">
+                    <div class="form-group row">
+                        <div class="col text-center">
+                            <label class=" header-text" for="text-input" style="display: block;">Ảnh mặt trước</label>
+                            <div class="">
+                                <img style="width:60%;margin-top:0.2rem;" [src]="frontUrl?frontUrl:thumbDefault" />
+                            </div>
+                        </div>
+                        <div class="col text-center">
+                            <label class=" header-text" for="text-input" style="display: block;">Ảnh mặt sau</label>
+                            <div class="">
+                                <img style="width:60%;margin-top:0.2rem;" [src]="backUrl?backUrl:thumbDefault" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header" style="border-top: 1px solid #e1e6ef;">
+                    <strong>Thông tin bổ sung của sinh viên</strong>
+                </div>
+                <div class="card-block">
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Email</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="email" name="email" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Điện thoại di động</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="mobile" name="mobile" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Địa chỉ liên hệ</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="contactAddress" name="contactAddress" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Trường</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="school" name="school" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Khoa</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="major" name="major" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Lớp</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="schoolClass" name="schoolClass" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Mã số sinh viên</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="studentCode" name="studentCode" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Năm bắt đầu</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="schoolYearStart" name="schoolYearStart" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Năm kết thúc</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="schoolYearEnd" name="schoolYearEnd" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header" style="border-top: 1px solid #e1e6ef;" *ngIf="studentFamilies.length === 0">
+                    <strong><b>Thông tin gia đình chưa cập nhật</b></strong>
+                </div>
+                <div class="card-header" style="border-top: 1px solid #e1e6ef;" *ngIf="studentFamilies.length > 0">
+                    <strong>Thông tin gia đình</strong>
+                </div>
+                <div class="card-block" *ngIf="studentFamilies.length > 0">
+                    <ng-template ngFor let-item [ngForOf]="studentFamilies" let-i="index">
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Họ tên</label>
+                            <div class="col-md-10">
+                                <input type="text" [(ngModel)]="item.fullName" name="item.fullName" class="form-control input-control"
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Vai trò</label>
+                            <div class="col-md-10">
+                                <input type="text" [(ngModel)]="item.familyRole.name" name="item.familyRole.name" class="form-control input-control"
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Năm sinh</label>
+                            <div class="col-md-10">
+                                <input type="text" [(ngModel)]="item.birthYear" name="item.birthYear" class="form-control input-control"
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Nghề nghiệp</label>
+                            <div class="col-md-10">
+                                <input type="text" [(ngModel)]="item.occupation" name="item.occupation" class="form-control input-control"
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Địa chỉ làm việc</label>
+                            <div class="col-md-10">
+                                <input type="text" [(ngModel)]="item.workplace" name="item.workplace" class="form-control input-control"
+                                    readonly>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+                <!-- <div class="card-header" style="border-top: 1px solid #e1e6ef;" *ngIf="studentRoom != null">
+                    <strong>Thông tin phòng ở của sinh viên</strong>
+                </div>
+                <div class="card-block" *ngIf="studentRoom != null">
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Ngày chuyển vào</label>
+                        <div class="col-md-10">
+                            <input type="text" [ngModel]="studentRoom.moveInDate | utcDate | date:'dd/MM/yyyy'" name="studentRoom.moveInDate"
+                                class="form-control input-control" readonly>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="card-header" style="border-top: 1px solid #e1e6ef;">
+                    <strong>Thông tin khác</strong>
+                </div>
+                <div class="card-block">
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Quốc gia</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="nationality" name="nationality" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Tỉnh, thành phố</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="region" name="region" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Quận, huyện</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="district" name="district" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Phường, xã</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="ward" name="ward" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Dân tộc</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="race" name="race" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Tôn giáo</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="religion" name="religion" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 header-text" for="text-input">Đối tượng ưu tiên</label>
+                        <div class="col-md-10">
+                            <input type="text" [(ngModel)]="priorityTarget" name="priorityTarget" class="form-control input-control"
+                                readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button (click)="backToList()" *ngIf="isEdit" class="btn btn-ladda btn-success ml-auto"><i class="fa fa-undo"></i>
+                        Quay lại</button>
+                </div>
+            </div>
+        </div>
+        <!--/.col-->
+    </div>
+</div>

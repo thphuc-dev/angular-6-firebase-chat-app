@@ -1,0 +1,180 @@
+<div class="animated fadeIn">
+	<div class="row">
+		<h3 class="col-5">Danh sách hoá đơn phòng</h3>
+		<div class="col-7">
+			<button class="btn btn-md button-default-success ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Tạo hoá đơn
+				cho các phòng</button>
+			<button class="btn btn-md button-default-primary ml-auto" (click)="verifiedAllPersonalBill()" [disabled]="!itemsTable.selectedRows.length"><i
+				 class="fa fa-check"></i>Xác nhận hoá đơn</button>
+			<button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i
+				 class="fa fa-trash"></i>Xóa hoá đơn</button>
+		</div>
+	</div>
+	<div class="table-wrapper">
+		<div class="search-bar row">
+			<div class="col-md-9">
+				<form #billForm="ngForm">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col">
+									<select #buildingIDControl="ngModel" [(ngModel)]="buildingID" name="buildingID" class="form-control input-control"
+									 (change)="getListRoomsOfBuilding($event)">
+										<option value=null [selected]="true">Toà nhà</option>
+										<option [value]="buildingID.id" *ngFor="let buildingID of listBuildings">
+											{{buildingID.name}}
+										</option>
+									</select>
+								</div>
+								<div class="col">
+									<select #roomControl="ngModel" [(ngModel)]="room" name="room" class="form-control input-control" [disabled]="!loadRoomDone">
+										<option value=null [selected]="true">Phòng ở</option>
+										<option [value]="room.name" *ngFor="let room of listRoomsOfBuilding">
+											{{room.name}}
+										</option>
+									</select>
+								</div>
+								<div class="col">
+									<input type="number" #floorControl="ngModel" class="form-control input-control" [(ngModel)]="floor" name="floor"
+									 [placeholder]="'Nhập số tầng'" required>
+								</div>
+							</div>
+							<div class="row" style="margin-top: 10px">
+								<div class="col">
+									<input type="number" #yearControl="ngModel" class="form-control input-control" [(ngModel)]="year" name="year"
+									 [placeholder]="'Nhập năm'" required>
+								</div>
+								<div class="col">
+									<input type="number" #monthControl="ngModel" class="form-control input-control" [(ngModel)]="month" name="month"
+									 [placeholder]="'Nhập tháng'" required>
+								</div>
+								<div class="col">
+									<select #isPaidControl="ngModel" [(ngModel)]="isPaid" name="isPaid" class="form-control input-control">
+										<option value=null [selected]="true">Trạng thái</option>
+										<option value="true">Đã thanh toán</option>
+										<option value="false">Chưa thanh toán</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-3 search-page-button">
+				<div class="row">
+					<div class="col">
+						<button class="btn btn-md button-default-info ml-auto" (click)="export(billForm)"><i class="fa fa-download"></i>Xuất file excel</button>
+						<button (click)="searchBill(billForm)" class="btn btn-md btn-ladda button-default-primary ml-h" data-style="expand-right"
+						 [ladda]='submitting'><i class="fa fa-search"></i>Tìm kiếm</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount"
+		 (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true"
+		 [substituteRows]="false" [selectOnRowClick]="false" [showReloading]="false" (rowClick)="rowClick($event)"
+		 (rowDoubleClick)="rowDoubleClick($event)">
+			<data-table-column header="Số CMND">
+				<ng-template #dataTableCell let-item="item">
+					{{item.studentInfo.idcard ? item.studentInfo.idcard : ''}}
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Họ tên">
+				<ng-template #dataTableCell let-item="item">
+					{{item.studentInfo.lastName}} {{item.studentInfo.firstName}}
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Toà nhà, phòng">
+				<ng-template #dataTableCell let-item="item">
+					Toà nhà {{item.studentInfo.building}}, phòng {{item.studentInfo.room}}
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Loại phòng">
+				<ng-template #dataTableCell let-item="item">
+					{{item.studentInfo.roomType}}
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Ngày tạo">
+				<ng-template #dataTableCell let-item="item">
+					{{item.createdDate | utcDate | date:'dd/MM/yyyy'}}
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Ngày thanh toán">
+				<ng-template #dataTableCell let-item="item">
+					<span *ngIf="item.paidDate !== -1">
+						{{item.paidDate | utcDate | date:'dd/MM/yyyy'}}
+					</span>
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Ngày hết hạn">
+				<ng-template #dataTableCell let-item="item">
+					{{item.expirationDate | utcDate | date:'dd/MM/yyyy'}}
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Trạng thái">
+				<ng-template #dataTableCell let-item="item">
+					<span class="badge p-h" [ngClass]="{'badge-success': checkIsEditableBill(item) == 'Đã xác nhận', 'badge-danger': checkIsEditableBill(item) == 'Chưa xác nhận'}">{{checkIsEditableBill(item)}}</span>
+					<span class="badge p-h" [ngClass]="{'badge-success': checkStatusBill(item) == 'Đã thanh toán', 'badge-danger': checkStatusBill(item) == 'Chưa thanh toán'}"
+					 style="margin-top: 5px;">{{checkStatusBill(item)}}</span>
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Thao tác">
+				<ng-template #dataTableCell let-item="item">
+					<button class="btn btn-sm btn-table btn-yellow" (click)="openModalAction(templateAction, item)"><i class="fa fa-wrench"
+						 aria-hidden="true"></i> Thao tác</button>
+				</ng-template>
+			</data-table-column>
+		</data-table>
+	</div>
+</div>
+<ng-template #templateAction>
+	<div class="modal-header">
+		<h4 id="dialog-sizes-name1" class="modal-title pull-left">Thao tác hoá đơn</h4>
+		<button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body ">
+		<div class="form-group row">
+			<label class="col-md-3 header-text" for="text-input" style="font-size: 13px">Thanh toán: </label>
+			<div class="col-md-9 action-bill">
+				<button class="btn btn-md button-default-success ml-auto" (click)="payPersonalBill(itemModal, $event)"><i class="fa fa-google-wallet"></i>
+					Thanh toán</button>
+				<button class="btn btn-md button-default-danger ml-auto" (click)="cancelPayPersonalBill(itemModal, $event)"><i
+					 class="fa fa-ban"></i> Huỷ thanh toán</button>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-md-3 header-text" for="text-input" style="font-size: 13px">Xác nhận: </label>
+			<div class="col-md-9 action-bill">
+				<button class="btn btn-md button-default-success ml-auto" (click)="verifiedPersonalBill(itemModal, $event)"><i
+					 class="fa fa-check"></i> Xác nhận</button>
+				<button class="btn btn-md button-default-danger ml-auto" (click)="cancelVerifiedPersonalBill(itemModal, $event)"><i
+					 class="fa fa-ban"></i> Huỷ xác nhận</button>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-md-3 header-text" for="text-input" style="font-size: 13px">Chi tiết/Cập nhật: </label>
+			<div class="col-md-9 action-bill">
+				<button class="btn btn-md button-default-primary ml-auto" (click)="editPersonalBill(itemModal)"><i class="fa fa-edit"></i>
+					Chi tiết/Cập nhật</button>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-md-3 header-text" for="text-input" style="font-size: 13px">In hoá đơn: </label>
+			<div class="col-md-9 action-bill">
+				<button class="btn btn-md button-default-info ml-auto" (click)="exportPDF(itemModal)"><i class="fa fa-print"></i>In
+					hoá đơn</button>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-md-3 header-text" for="text-input" style="font-size: 13px">Xoá: </label>
+			<div class="col-md-9 action-bill">
+				<button class="btn btn-md button-default-danger ml-auto" (click)="deleteBill(itemModal)"><i class="fa fa-trash"></i>
+					Xoá hoá đơn</button>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+	</div>
+</ng-template>

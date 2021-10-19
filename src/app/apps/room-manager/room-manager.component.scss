@@ -1,0 +1,257 @@
+@import "../../../scss/bootstrap-variables";
+
+.heading-figures {
+  padding: 0px;
+  text-align: left;
+  @media screen and (max-width: 768px) {
+    text-align: center;
+  }
+  .profit {
+    padding-right: 0px;
+    .current-profit {
+      color: $bluegrey_darker;
+      font-size: 3rem;
+      font-weight: 500;
+    }
+    .profit-text {
+      color: $bluegrey_dark;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+  }
+
+  .right-figures {
+    text-align: right;
+    padding-left: 0px;
+    @media screen and (max-width: 768px) {
+      text-align: center;
+    }
+    padding-top: 10px;
+    .figure-group {
+      display: inline-block;
+      text-align: inherit;
+      margin: 8px;
+      .right-figure-number {
+        text-align: inherit;
+        color: $brand-primary;
+        font-size: 1rem;
+      }
+      .right-figure-text {
+        text-align: inherit;
+        color: $bluegrey;
+        font-size: 0.7rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.box {
+  padding: 10px;
+  .card {
+    margin-bottom: 10px;
+    border: 1px solid $grey-lighter;
+    height: 100%;
+    .card-body {
+      padding: 10px;
+      height: 100%;
+      .box-number {
+        color: $bluegrey_darker;
+        font-size: 2rem;
+        padding-top: 8px;
+      }
+      .box-text {
+        color: $bluegrey_dark;
+        font-size: 0.7rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.wide-bg {
+  background-color: $grey-lightest;
+  background-clip: border-box;
+  margin-top: 15px;
+  margin-left: -30px;
+  margin-right: -30px;
+  border-top: 30px solid transparent;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 10px solid transparent;
+}
+
+.bill-container {
+  height: 100px;
+  height: calc(100vh - 80px);
+  background: transparent;
+  .email-app {
+    background: transparent;
+    border: none;
+    height: 100%;
+    margin-bottom: 0px !important;
+    overflow: hidden;
+    nav {
+      background: white;
+      border: none;
+      border-radius: 3px;
+      height: auto;
+      display: block;
+      padding: 8px 15px;
+      .nav-link {
+        color: $bluegrey-darker;
+        font-weight: normal;
+        padding: 0px;
+        border: none;
+        transition: all 0.3s ease;
+        padding-top: 8px;
+        i {
+          color: $bluegrey-mild;
+          margin-left: 5px;
+          margin-right: 8px;
+          transition: all 0.3s ease;
+        }
+      }
+      .form-group {
+        margin-bottom: 8px;
+      }
+    }
+    .bill-list {
+      background: white;
+      margin-left: 8px;
+      border-radius: 3px;
+      height: 100%;
+      padding: 0px !important;
+    }
+  }
+}
+
+.blue-primary {
+  color: $brand-primary !important;
+  i {
+    color: $brand-primary !important;
+  }
+}
+
+.info-box {
+  display: block;
+  min-height: 75px;
+  background: #fff;
+  width: 100%;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  margin-bottom: 15px;
+}
+.bg-aqua {
+  background-color: #00c0ef !important;
+}
+.bg-red {
+  background-color: rgba(252, 31, 73, 1) !important;
+}
+.bg-green {
+  background-color: #00a65a !important;
+}
+.bg-yellow {
+  background-color: #f39c12 !important;
+}
+.info-box-content {
+  padding: 5px 10px;
+  margin-left: 75px;
+}
+.info-box-text {
+  text-transform: uppercase;
+}
+.info-box-number {
+  display: block;
+  font-weight: bold;
+  font-size: 18px;
+}
+.info-box-icon {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 2px;
+  display: block;
+  float: left;
+  height: 75px;
+  width: 75px;
+  text-align: center;
+  font-size: 45px;
+  line-height: 75px;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+.data-chart {
+  text-align: center;
+}
+.form-control {
+  color: #333;
+}
+.info-box-content a {
+  color: #374767;
+}
+.info-box-content a:hover {
+  text-decoration: none;
+}
+.room-manager .card-header .btn {
+  margin-top: 0;
+}
+.room-manager .btn.btn-success.active:focus {
+  color: #fff;
+  background-color: #3d8b40;
+  border-color: #39833c;
+}
+/deep/ .room-manager .index-column-header {
+  width: 45px !important;
+}
+.room-manager .btn.btn-primary.active:focus {
+  color: #fff;
+  background-color: #00635a;
+  border-color: #00564e;
+}
+.room-manager .btn.btn-info.active:focus {
+  color: #fff;
+  background-color: #0286c2;
+  border-color: #027db5;
+}
+.room-manager p {
+  margin-bottom: 0;
+}
+.note button {
+  margin-bottom: 0;
+  margin-right: 5px;
+}
+.header-building,
+.header-room {
+  padding: 5px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.note span {
+  font-size: 14px;
+  font-weight: 600;
+}
+.align-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.button-default-primary {
+  border-color: transparent;
+  background-color: #2ba8d6;
+  color: #fafafa;
+}
+.header-text {
+  color: #272c33;
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+}
+.btn.btn-sm {
+  font-size: 10px;
+  text-transform: inherit;
+}

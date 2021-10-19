@@ -1,0 +1,66 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Thông tin</strong>
+                </div>
+                <div class="card-block">
+                    <form #itemFrm="ngForm">
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Mã khoản thu</label>
+                            <div class="col-md-10">
+                                <input type="text" #idControl="ngModel" [(ngModel)]="id" name="id" class="form-control input-control" [placeholder]="'Nhập mã khoản thu'" required [disabled]="isEdit">
+                                <small *ngIf="idControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Tên khoản thu</label>
+                            <div class="col-md-10">
+                                <input type="text" #nameControl="ngModel" [(ngModel)]="name" name="name" class="form-control input-control" [placeholder]="'Nhập tên khoản thu'" required>
+                                <small *ngIf="nameControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Giá</label>
+                            <div class="col-md-10">
+                                <input type="text" #feeShowControl="ngModel" [ngModel]="feeShow | accounting" name="feeShow" class="form-control input-control" [placeholder]="'Nhập giá'" required (ngModelChange)="feeShow = $event">
+                                <small *ngIf="feeShowControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Đơn vị</label>
+                            <div class="col-md-10">
+                                <input type="text" #unitControl="ngModel" [(ngModel)]="unit" name="unit" class="form-control input-control" [placeholder]="'Nhập đơn vị'" required>
+                                <small *ngIf="unitControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Ưu tiên</label>
+                            <div class="col-md-10">
+                                <input type="number" #priorityControl="ngModel" [(ngModel)]="priority" name="priority" class="form-control input-control" [placeholder]="'Nhập mức độ ưu tiên'" required>
+                                <small *ngIf="priorityControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
+                    <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
+                    <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
+                </div>
+            </div>
+        </div>
+        <!--/.col-->
+    </div>
+</div>

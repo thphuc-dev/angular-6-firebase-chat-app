@@ -1,0 +1,37 @@
+<div class="animated fadeIn">
+	<div class="row">
+		<h3 class="col-6">Danh sách Admin</h3>
+		<div class="col-6">
+			<button class="btn btn-md button-default-primary ml-auto" (click)="addItem()"><i class="fa fa-plus"></i>Thêm Admin</button>
+			<button class="btn btn-md button-default-danger ml-auto" (click)="deleteAll()" [disabled]="!itemsTable.selectedRows.length"><i class="fa fa-trash"></i>Xóa Admin</button>
+		</div>
+	</div>
+	<div class="table-wrapper">
+		<data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount" (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true" [substituteRows]="false"
+		[selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)" (rowDoubleClick)="rowDoubleClick($event)">
+		<data-table-column property="avatar" header="Avatar">
+			<ng-template #dataTableCell let-item="item">
+				<p lazy-load-images>
+					<img height="50px" [src]="item.avatarUrl?item.avatarUrl:thumbDefault" onerror="this.src='http://www.breeze-animation.com/app/uploads/2013/06/icon-product-gray.png'">
+				</p>
+			</ng-template>
+		</data-table-column>
+		<data-table-column property="firstName" header="Họ" [sortable]="true">
+		</data-table-column>
+		<data-table-column property="lastName" header="Tên" [sortable]="true">
+		</data-table-column>
+		<data-table-column property="email" header="Email" [sortable]="true">
+		</data-table-column>
+		<data-table-column header="Phòng ban">
+			<ng-template #dataTableCell let-item="item">
+				{{item.department ? item.department.name : ''}}
+			</ng-template>
+		</data-table-column>
+		<data-table-column header="Thao tác">
+			<ng-template #dataTableCell let-item="item">
+				<button (click)="viewItem(item)" class="btn btn-sm btn-table btn-yellow"><i class="fa fa-eye" aria-hidden="true"></i></button>
+			</ng-template>
+		</data-table-column>
+		</data-table>
+	</div>
+</div>

@@ -1,0 +1,115 @@
+<header class="app-header navbar">
+    <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">
+    <i class="fa fa-bars" aria-hidden="true"></i>
+    </button>
+    <a class="navbar-brand" [routerLink]="['/launcher/tool']">
+        <div class="logo-wrapper">
+            <img id="logo" src="../../assets/img/_thumb_10856.png" />&nbsp; <span style="color: white">VNU.CSS</span>
+        </div>
+    </a>
+    <ul class="nav navbar-nav mr-auto">
+        <li class="nav-item hidden-md-down">
+            <a class="nav-link navbar-toggler sidebar-toggler" href="javascript:;">
+            <i class="material-icons">keyboard_arrow_left</i>
+            </a>
+        </li>
+        <li class="nav-item dropdown hidden-lg-up" dropdown placement="bottom" id="accountDropdownMenu">
+            <div class="btn-group" dropdown [isDisabled]="disabled">
+                <button id="button-disabled-menu" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                    aria-controls="dropdown-disabled-menu">
+                <img [src]="avatarUrl" class="img-avatar" onerror="this.style.display = 'none'"> <span class="caret"></span>
+                </button>
+                <div class="user-name hidden-md-down" data-toggle="dropdown">
+                    {{firstName}} {{lastName}}
+                </div>
+                <ul id="dropdown-disabled-menu" *dropdownMenu class="dropdown-menu hidden-lg-up"
+                    role="menu" aria-labelledby="button-disabled-menu">
+                    <div class="info-staff" data-toggle="dropdown" aria-labelledby="accountDropdownMenu">
+                        <li role="menuitem">
+                            <a [routerLink]="['/admin/staff/profile']">
+                                <i class="fa fa-wrench"></i> Cập nhật thông tin
+                            </a>
+                        </li>
+                        <li role="menuitem" (click)="signout($event)"><i class="fa fa-sign-out" aria-hidden="true"></i> Đăng xuất</li>
+                    </div>
+                </ul>
+            </div>
+        </li>
+        <div class="name-separator hidden-md-down hidden-lg-up"></div>
+    </ul>
+    <ul class="nav navbar-nav ml-auto hidden-md-down">
+        <li class="nav-item dropdown" dropdown placement="bottom" id="accountDropdownMenuLg" style="margin-right: 30px !important">
+            <button id="button-disabled-menu-lg" dropdownToggle type="button" class="btn dropdown-toggle"
+                aria-controls="dropdown-disabled-menu-lg">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> Thông tin nhân viên <span class="caret"></span>
+            </button>
+            <ul id="dropdown-disabled-menu-lg" *dropdownMenu class="dropdown-menu"
+                role="menu" aria-labelledby="button-disabled-menu-lg">
+                <div class="info-staff" data-toggle="dropdown" aria-labelledby="accountDropdownMenuLg">
+                    <li role="menuitem">
+                        <a [routerLink]="['/admin/staff/profile']">
+                            <i class="fa fa-wrench"></i> Cập nhật thông tin
+                        </a>
+                    </li>
+                    <li role="menuitem" (click)="signout($event)">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i> Đăng xuất
+                    </li>
+                </div>
+            </ul>
+        </li>
+    </ul>
+</header>
+<div class="app-body">
+    <div class="sidebar">
+        <nav class="sidebar-nav">
+            <ul class="nav">
+                <div *ngFor="let nav of navigations">
+                    <li class="nav-item nav-non-dropdown" *ngIf="nav.type=='single'">
+                        <a class="nav-link" routerLinkActive="active" [routerLink]="nav.link">
+                        <i [ngClass]="nav.icon"></i> {{nav.name}} </a>
+                    </li>
+                    <li class="nav-title" *ngIf="nav.type=='title'">
+                        <span>{{nav.name}}</span>
+                    </li>
+                    <li class="nav-item nav-dropdown" routerLinkActive="open" *ngIf="nav.type=='parent'">
+                        <a class="nav-link nav-dropdown-toggle" href="javascript:;">
+                        <i [ngClass]="nav.icon"></i>{{nav.name}}</a>
+                        <ul class="nav-dropdown-items">
+                            <ng-template ngFor let-c [ngForOf]="nav.children" let-i="index">
+                                <li class="nav-item nav-dropdown" routerLinkActive="open" *ngIf="c.type !== undefined; else nonChild">
+                                    <a class="nav-link nav-dropdown-toggle" href="javascript:;">
+                                    <i [ngClass]="c.icon"></i>{{c.name}}</a>
+                                    <ul class="nav-dropdown-items">
+                                        <li class="nav-item" *ngFor="let child of c.children">
+                                            <a class="nav-link" routerLinkActive="active" (click)="navigate(child.link)" [routerLink]="child.link">
+                                            <i [ngClass]="child.icon"></i>{{child.name}}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <ng-template #nonChild>
+                                    <li class="nav-item">
+                                        <a class="nav-link" routerLinkActive="active" (click)="navigate(c.link)" [routerLink]="c.link">
+                                        <i [ngClass]="c.icon"></i>{{c.name}}</a>
+                                    </li>
+                                </ng-template>
+                            </ng-template>
+                        </ul>
+                    </li>
+                </div>
+            </ul>
+        </nav>
+    </div>
+    <!-- Main content -->
+    <div *ngIf="showLoading" id="loader-full-layout"></div>
+    <main class="main" [ngStyle]="{'display':!showLoading ? 'block' : 'none'}">
+        <!-- Breadcrumb -->
+        <ol class="breadcrumb">
+            <breadcrumbs></breadcrumbs>
+        </ol>
+        <div class="container-fluid">
+            <router-outlet></router-outlet>
+        </div>
+        <!-- /.conainer-fluid -->
+    </main>
+</div>
+<toaster-container [toasterconfig]="toasterconfig"></toaster-container>

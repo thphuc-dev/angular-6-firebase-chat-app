@@ -1,0 +1,51 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Thông tin</strong>
+                </div>
+                <div class="card-block">
+                    <form #itemFrm="ngForm">
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Ngày bắt đầu ở</label>
+                            <div class="col-md-10">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="dd/mm/yyyy" class="form-control" [minDate]="minDate" bsDatepicker #appliedDateShowControl="ngModel" [(ngModel)]="appliedDateShow" name="appliedDateShow" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" #start1="bsDatepicker" placement="right"  triggers="dblclick:click">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <button class="btn btn-success" (click)="start1.toggle()" [attr.aria-expanded]="start1.isOpen">Chọn
+                                            ngày bắt đầu ở</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Ngày hết hạn</label>
+                            <div class="col-md-10">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="dd/mm/yyyy" class="form-control" [minDate]="minDate"
+                                            bsDatepicker #expirationDateShowControl="ngModel" [(ngModel)]="expirationDateShow"
+                                            name="expirationDateShow" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+                                            #start="bsDatepicker" placement="right" triggers="dblclick:click">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <button class="btn btn-success" (click)="start.toggle()" [attr.aria-expanded]="start.isOpen">Chọn
+                                            ngày hết hạn</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto"
+                        data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
+                </div>
+            </div>
+        </div>
+        <!--/.col-->
+    </div>
+</div>

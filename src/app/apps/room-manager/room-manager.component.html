@@ -1,0 +1,112 @@
+<div class="animated fadeIn room-manager">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header ">
+                    <div class="row">
+                        <div class="col-2">
+                            <p class="header-building"><i class="fa fa-building-o" aria-hidden="true"></i> Toà nhà</p>
+                        </div>
+                        <div class="col-10">
+                            <p class="pull-left header-room"><i class="fa fa-user" aria-hidden="true"></i> Phòng</p>
+                            <p class="pull-right note">
+                                <span class=""><i class="fa fa-sticky-note-o" aria-hidden="true"></i> Chú thích: </span>
+                                <button class="btn btn-primary">Phòng Nam</button>
+                                <button class="btn btn-info">Phòng Nữ</button>
+                                <button class="btn btn-default">Phòng Trống</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-block ">
+                    <div class="row">
+                        <div class="col-2">
+                            <button *ngFor="let building of listBuildings" class="btn btn-success" (click)="getListRooms(building)"
+                                [ngClass]="{'active' : building.id === currentBuilding.id}">
+                                <i class="fa fa-home" aria-hidden="true"></i> {{building.name}}
+                            </button>
+                        </div>
+                        <div class="col-10">
+                            <div class="row" style="height: 100%;width: 100%;">
+                                <div class="col text-center align-center" *ngFor="let room of listRooms">
+                                    <button class="btn" [ngClass]="{'btn-primary': room.gender == 'MALE' && room.currentCapacity != 0, 'btn-info': room.gender == 'FEMALE' && room.currentCapacity != 0, 'active' : room.id == currentRoom.id, 'btn-default': room.currentCapacity == 0}"
+                                        (click)="getListStudents(room)">
+                                        <span class="room-name">{{room.name}}</span><br>
+                                        <span class="room-capacity">{{room.currentCapacity}}/{{room.capacity}}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer" *ngIf="loadListStudents">
+                    <div *ngIf="listStudents.length > 0; else empty">
+                        <h3>Danh sách sinh viên trong phòng {{currentRoom.name}}</h3>
+                        <div class="table-wrapper">
+                            <data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="listStudents"
+                                [pagination]="false" [header]="false" [indexColumn]="true" [substituteRows]="false"
+                                [showReloading]="false">
+                                <data-table-column header="Tên sinh viên" [sortable]="true">
+                                    <ng-template #dataTableCell let-item="item">
+                                        {{item.lastName}} {{item.firstName}}
+                                    </ng-template>
+                                </data-table-column>
+                                <data-table-column header="Tên đăng nhập" [sortable]="true">
+                                    <ng-template #dataTableCell let-item="item">
+                                        {{item.username}}
+                                    </ng-template>
+                                </data-table-column>
+                                <data-table-column header="Ngày sinh" [sortable]="true">
+                                    <ng-template #dataTableCell let-item="item">
+                                        {{item.dateOfBirth | utcDate | date:'dd/MM/yyyy'}}
+                                    </ng-template>
+                                </data-table-column>
+                                <data-table-column header="Thao tác">
+                                    <ng-template #dataTableCell let-item="item">
+                                        <button class="btn btn-sm btn-table btn-yellow" (click)="openModalAction(templateAction, item)"><i
+                                                class="fa fa-wrench" aria-hidden="true"></i> Thao tác</button>
+                                    </ng-template>
+                                </data-table-column>
+                            </data-table>
+                        </div>
+                    </div>
+                    <ng-template #empty>
+                        <h5 class="text-center"><i class="fa fa-spin fa-spinner"></i> Không tìm thấy</h5>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #templateAction>
+    <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Thao tác phòng cho sinh viên</h4>
+        <button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <div class="form-group row">
+            <label class="col-md-3 header-text" for="text-input" style="font-size: 13px">Chọn phòng ở:
+            </label>
+            <div class="col-md-9 ">
+                <select #roomIDControl="ngModel" [(ngModel)]="roomID" name="roomID"
+                    class="form-control input-control" style="width: 62%;float: left">
+                    <option value=null [selected]="true" disabled>Chọn phòng ở</option>
+                    <option [value]="room.id" *ngFor="let room of listRoomOfAllBuildings">Toà nhà {{room.building.name}}, phòng {{room.name}}</option>
+                </select>
+                <button class="btn btn-md button-default-primary ml-auto" (click)="changeRoom(roomID)"><i
+                    class="fa fa-wrench"></i> Đổi phòng</button>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 header-text" for="text-input" style="font-size: 13px">Cho ra: </label>
+            <div class="col-md-9 action-bill">
+                <button class="btn btn-md button-default-danger ml-auto" (click)="kickStudent(idStudent)"><i class="fa fa-trash"></i>
+                    Cho ra</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+    </div>
+</ng-template>

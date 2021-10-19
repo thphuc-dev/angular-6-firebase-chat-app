@@ -1,0 +1,171 @@
+<div id="frame">
+    <div id="sidepanel">
+        <div id="profile">
+            <div class="wrap">
+                <img id="profile-img" [src]="currentStaffAvatarUrl" class="online" alt="" />
+                <p>{{currentStaffLastName}} {{currentStaffFirstName}}</p>
+            </div>
+            <div class="btn-group select-department" dropdown>
+                <button id="settings" dropdownToggle type="button" aria-controls="dropdown-dropup" class="dropdown-toggle">
+                    <span class="chat-span-toggle">
+                        <p>{{departmentSelected ? departmentSelected.name : 'Phòng ban'}}</p>
+                    </span>
+                </button>
+                <ul id="dropdown-dropup" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-dropup">
+                    <li role="menuitem" *ngFor="let department of listDepartments">
+                        <a class="dropdown-item" (click)="getListStudentsFromDepartment(department)">{{department.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="search">
+            <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+            <input type="text" placeholder="Tìm kiếm theo tên đăng nhập..." (keyup)="onSearch($event)" />
+            <button (click)="searchStudent()" class="btn chat-search-student">Tìm</button>
+        </div>
+        <div id="contacts" (scroll)="onScroll($event)">
+            <div class="loadingDropup" *ngIf="loadingDropup">
+                <div class="lds-facebook">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <ul>
+                <ng-template ngFor let-item [ngForOf]="listStudentsFromDepartmentMerged" let-i="index">
+                    <li class="contact" [ngClass]="{'active': item.student.id === selectedIdStudent && currentGroup.department.id === item.department.id}"
+                        (click)="changeGroup(item)">
+                        <div class="wrap">
+                            <img [src]="item.student.avatar ? item.student.avatar : defautlAvatarUrl" alt="" />
+                            <div class="meta">
+                                <p class="name">{{item.student.lastName ? item.student.lastName :
+                                    item.student.username}} {{item.student.firstName}}</p>
+                                <p class="preview" [innerHtml]="showLastMessage(item)" [ngClass]="{'message-seen': checkIsSeenMesssage(item) == true}"></p>
+                            </div>
+                        </div>
+                    </li>
+                </ng-template>
+            </ul>
+        </div>
+        <div id="bottom-bar">
+            <div class="btn-group select-dropdown-chat" dropdown [dropup]="isDropup">
+                <button [disabled]="!hasRoom" id="settings" dropdownToggle type="button" aria-controls="dropdown-dropup"
+                    class="dropdown-toggle" style="width: 100%">
+                    <span class="chat-span-toggle">
+                        <p>{{buildingSelected ? buildingSelected.name : 'Toà nhà'}}</p>
+                    </span>
+                </button>
+                <ul id="dropdown-dropup" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-dropup">
+                    <li role="menuitem" *ngFor="let building of listBuildings">
+                        <a class="dropdown-item" (click)="getListRoomsFromBuilding(building)">{{building.name}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group select-dropdown-chat" dropdown [dropup]="isDropup">
+                <input type="number" class="form-control input-control" placeholder="Nhập số tầng" [(ngModel)]="floor"
+                    name="floor" [disabled]="!hasBuilding" (keyup)="changeFloor($event)" (blur)="changeFloor($event)">
+            </div> 
+            <div class="btn-group select-dropdown-chat" dropdown [dropup]="isDropup">
+                <button [disabled]="!hasRoom" id="settings" dropdownToggle type="button" aria-controls="dropdown-dropup"
+                    class="dropdown-toggle" style="width: 100%">
+                    <span class="chat-span-toggle">
+                        <p>{{roomSelected ? roomSelected.name :
+                            'Phòng ở'}}</p>
+                    </span>
+                </button>
+                <ul id="dropdown-dropup" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-dropup">
+                    <li role="menuitem" *ngFor="let room of listRoomsFromBuilding">
+                        <a class="dropdown-item" (click)="getListStudentsFromRoom(room, floor)">{{room.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="student-not-have-room">
+            <input type="checkbox" (change)="changeCheckbox($event)" style="width: 20px">Sinh viên chưa có
+            phòng
+        </div>
+    </div>
+    <div class="content">
+        <div class="contact-profile" *ngIf="!isEmpty(currentGroup) && departmentSelected.id === currentGroup.department.id">
+            <img [src]="getAvatarOfUser(currentGroup.student.id)" alt="" />
+            <p>{{currentGroup.student.lastName !== null && currentGroup.student.firstName !== null ?
+                currentGroup.student.lastName + ' ' + currentGroup.student.firstName : currentGroup.student.username}}</p>
+        </div>
+        <div class="messages" (scroll)="scrollLoadListMessages($event)" [class.backgroud-loading]="loadingUploadFile || loadingMoreMessage">
+            <div class="loadingUploadFile" *ngIf="loadingUploadFile || loadingMoreMessage">
+                <div class="lds-facebook">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <ul *ngIf="listMessages.length > 0">
+                <ng-template ngFor let-mes [ngForOf]="listMessages" let-i="index" let-last="last">
+                    <li class="sent" *ngIf="mes.userId === currentUserId; else replies">
+                        <em class="sent-seen" *ngIf="last && isSeen(mes)">Đã xem</em>
+                        <p *ngIf="mes.type === 'text'">{{mes.content}}</p>
+                        <ng-container *ngIf="mes.type === 'image'">
+                            <a [href]="mes.content">
+                                <img [src]="mes.content" class="file-upload-img" />
+                            </a>
+                        </ng-container>
+                        <ng-container *ngIf="mes.type === 'file'">
+                            <a [href]="mes.content">
+                                <span>
+                                    <i class="fa fa-file" aria-hidden="true" style="font-size: 20px;margin-right: 10px;"></i>
+                                    <b>{{mes.fileName}}</b>
+                                </span>
+                            </a>
+                        </ng-container>
+                    </li>
+                    <ng-template #replies>
+                        <li class="replies">
+                            <img [src]="getAvatarOfUser(mes.userId)" [tooltip]="getNameOfUser(mes.userId)" placement="right" />
+                            <p *ngIf="mes.type === 'text'">{{mes.content}}</p>
+                            <ng-container *ngIf="mes.type === 'image'">
+                                <a [href]="mes.content" target="_blank">
+                                    <img [src]="mes.content" class="file-upload-img" />
+                                </a>
+                            </ng-container>
+                            <ng-container *ngIf="mes.type === 'file'">
+                                <a [href]="mes.content" target="_blank">
+                                    <span>
+                                        <i class="fa fa-file" aria-hidden="true" style="font-size: 20px;margin-right: 10px;"></i>
+                                        <b>{{mes.fileName}}</b>
+                                    </span>
+                                </a>
+                            </ng-container>
+                            <em class="replies-seen" *ngIf="last && isSeen(mes)">Đã xem</em>
+                        </li>
+                    </ng-template>
+                </ng-template>
+            </ul>
+        </div>
+        <div class="message-input">
+            <div class="wrap" id="div-emoji">
+                <input type="text" placeholder="Nhập tin nhắn..." #messageInput (keyup.enter)="sendMessage(messageInput)"
+                    data-meteor-emoji="true" />
+                <input accept="*" type="file" (change)="openFileSendingConfirmDialog($event,template)" #fileUploader
+                    class="hidden" />
+                <button class="submit" (click)="sendMessage(messageInput)"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                <button class="file" (click)="fileUploader.click()"><i class="fa fa-paperclip attachment" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #template>
+    <div class="modal-body">
+        <a [ngSwitch]="typeFileModal">
+            <img *ngSwitchCase="'image'" [src]="nameFile" />
+            <span *ngSwitchCase="'file'" class="file-show">
+                <i class="fa fa-file" aria-hidden="true"></i>
+                <p class="name-file">{{nameFile}}</p>
+                <p class="size-file">{{sizeFile}}</p>
+            </span>
+        </a>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="modalRef.hide()" style="margin-right: 10px;">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="uploadChosenFile()">Upload</button>
+    </div>
+</ng-template>

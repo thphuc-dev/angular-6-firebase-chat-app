@@ -1,0 +1,87 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <form #itemFrm="ngForm">
+                    <div class="card-header">
+                        <strong>Thông tin</strong>
+                    </div>
+                    <div class="card-block">
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Tiêu đề</label>
+                            <div class="col-md-10">
+                                <input type="text" #titleControl="ngModel" [(ngModel)]="title" name="title" class="form-control input-control" [placeholder]="'Nhập tiêu đề'" required>
+                                <small *ngIf="titleControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Loại thông báo</label>
+                            <div class="col-md-10">
+                                <select #announcementTypeIDControl="ngModel" [(ngModel)]="announcementTypeID" name="announcementTypeID" class="form-control input-control">
+                                    <option value=null [selected]="true">Chọn loại thông báo</option>
+                                    <option [value]="announcementTypeID.id" *ngFor="let announcementTypeID of listAnnouncementTypes">{{announcementTypeID.name}}</option>
+                                </select>
+                                <small *ngIf="announcementTypeIDControl.value == null" class="text-muted danger">
+                                    (Vui lòng chọn loại thông báo)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Nội dung</label>
+                            <div class="col-md-10">
+                                <textarea type="text" #contentControl="ngModel" [(ngModel)]="content" name="content" class="form-control input-control" [placeholder]="'Nhập nội dung'" required rows="7" [froalaEditor]></textarea>
+                                <small *ngIf="contentControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row" *ngIf="isEdit">
+                            <label class="col-md-2 header-text" for="text-input">Lượt xem</label>
+                            <div class="col-md-10">
+                                <input type="text" #viewControl="ngModel" [(ngModel)]="view" name="view" class="form-control input-control" required disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row" *ngIf="isEdit">
+                            <label class="col-md-2 header-text" for="text-input">Người đăng</label>
+                            <div class="col-md-10">
+                                <input type="text" #createdStaffControl="ngModel" [(ngModel)]="createdStaff" name="createdStaff" class="form-control input-control" required disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row" *ngIf="isEdit">
+                            <label class="col-md-2 header-text" for="text-input">Ngày đăng</label>
+                            <div class="col-md-10">
+                                <input type="text" #createdDateControl="ngModel" [ngModel]="createdDate | utcDate | date:'HH:mm:ss dd/MM/yyyy'" name="createdDate" class="form-control input-control" required disabled (ngModelChange)="createdDate = $event">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header" style="border-top: 1px solid #e1e6ef;">
+                        <strong>Tập tin đính kèm </strong> <em>(Ảnh thứ nhất là hình của thông báo, ảnh thứ 2 trở đi là các tập tin đính kèm)</em>
+                        <button class="btn btn-md button-default-info ml-auto" (click)="addAttaches()"><i class="fa fa-plus"></i>Thêm tập tin</button>
+                    </div>
+                    <div class="card-block">
+                        <div class="form-group row" *ngFor="let item of announcementAttaches; let i=index">
+                            <label class="col-md-2 header-text" for="text-input">Tập tin {{i+1}}</label>
+                            <div class="col-md-10">
+                                <input type="text" [(ngModel)]="announcementAttaches[i].name" name="announcementAttaches{{i}}.name" class="form-control input-control" [placeholder]="'Nhập tên'" required style="margin-bottom: 10px">
+                                <input type="text" [(ngModel)]="announcementAttaches[i].url" name="announcementAttaches{{i}}.url" class="form-control input-control" [placeholder]="'Nhập đường dẫn tập tin'" required style="margin-bottom: 10px">
+                                <label class="btn btn-info" for="attaches{{i}}" style="width: 100%;text-transform: inherit">
+                                    <span *ngIf="!spinnerLoading"><i class="fa fa-picture-o"></i> Upload tập tin </span>
+                                    <span *ngIf="spinnerLoading"><i class="fa fa-cloud-upload"></i> Đang tải tập tin </span>
+                                    <div class="lds-ellipsis" *ngIf="spinnerLoading"><div></div><div></div><div></div><div></div></div>
+                                </label>
+                                <input id="attaches{{i}}" type="file" (change)="uploadAttaches($event, i)" #fileUploader [(ngModel)]="announcementAttaches[i].file" name="announcementAttaches[i].file" [value]="announcementAttaches[i].file" class="hidden">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="card-footer">
+                    <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
+                    <button (click)="updateAndClose(itemFrm)" *ngIf="isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-edit"></i> Sửa và thoát</button>
+                </div>
+            </div>
+        </div>
+        <!--/.col-->
+    </div>
+</div>

@@ -1,0 +1,136 @@
+h3 {
+  margin: 0;
+  padding-top: 5px;
+}
+
+.custom-fa {
+  font-size: 20px;
+  padding: 4px;
+}
+
+.material-icons {
+  padding-bottom: 5px;
+}
+
+/deep/ data-table table {
+  box-shadow: none !important;
+}
+
+/deep/ data-table .column-header span {
+  font-size: 0.8rem !important;
+}
+
+/deep/ data-table span .number-style {
+  text-align: right;
+}
+
+/deep/ table td,
+/deep/ table th {
+  text-align: center;
+}
+
+.search-bar {
+  width: 100%;
+  padding-bottom: 1rem;
+}
+
+.search-bar p {
+  width: 120px;
+}
+
+/deep/ data-table .refresh-button {
+  display: none;
+}
+
+.search-bar input{
+  height: 35px;
+}
+/deep/ .input-group input+.input-group-addon{
+  margin-left: 0;
+}
+.btn.btn-sm {
+  font-size: 10px;
+  text-transform: inherit;
+}
+.button-default-success {
+  float: right;
+  margin-right: 10px;
+  color: #fff;
+  border: 1px solid #4cae4c;
+  background-color: #5cb85c;
+  border-radius: 5px;
+  text-transform: none !important;
+  i {
+    margin-right: 5px;
+  }
+  transition: all 0.3s ease;
+  &:hover {
+    border-color: #398439;
+    background-color: #449d44;
+    color: #fff;
+  }
+  &:focus {
+    border-color: #398439;
+    background-color: #449d44;
+    color: #fff;
+  }
+}
+.button-default-info {
+  float: right;
+  margin-right: 10px;
+  color: #fff;
+  border: 1px solid #46b8da;
+  background-color: #5bc0de;
+  border-radius: 5px;
+  text-transform: none !important;
+  i {
+    margin-right: 5px;
+  }
+  transition: all 0.3s ease;
+  &:hover {
+    border-color: #269abc;
+    background-color: #31b0d5;
+    color: #fff;
+  }
+  &:focus {
+    border-color: #269abc;
+    background-color: #31b0d5;
+    color: #fff;
+  }
+}
+.button-default-success:disabled, .button-default-info:disabled{
+  border: 1px solid #BDBDBD;
+  background: transparent;
+  color: rgba(0,0,0,.26);
+}
+.input-checkbox{
+  margin-top: 12px;
+  float: left;
+  margin-left: 10px;
+}
+.search-page-button button{
+  padding: .46875rem 1rem;
+}
+.checkbox label{
+  color: #757575;
+}
+.checkbox label input[type=checkbox]{
+  height: 0;
+  overflow: inherit;
+  opacity: 1;
+  opacity: 1;
+  top: 3px;
+}
+.button-default-primary:disabled {
+  border: 1px solid #BDBDBD;
+    background: transparent;
+    color: rgba(0, 0, 0, 0.26);
+}
+.button-default-primary {
+  background-color: #37baea;
+  color: #FAFAFA;
+  border: 1px solid #37baea;
+}
+/deep/ bs-datepicker-container{
+  z-index: 999999;
+}

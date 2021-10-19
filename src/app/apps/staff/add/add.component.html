@@ -1,0 +1,109 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Thông tin</strong>
+                </div>
+                <div class="card-block">
+                    <form #itemFrm="ngForm">
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Tên đăng nhập</label>
+                            <div class="col-md-10">
+                                <input type="text" #usernameControl="ngModel" [(ngModel)]="username" name="username" class="form-control input-control" [placeholder]="'Nhập tên đăng nhập'" required (keydown.space)="$event.preventDefault()"  pattern="[a-z0-9]*" minlength="4">
+                                <small *ngIf="usernameControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                                <small *ngIf="usernameControl.errors?.minlength" class="text-muted danger">
+                                    (Tên đăng nhập phải từ 4 ký tự trở lên)
+                                </small>
+                                <small *ngIf="usernameControl.errors?.pattern" class="text-muted danger">
+                                    (Tên đăng nhập gồm chữ thường và số, không có kí tự đặc biệt)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Mật khẩu</label>
+                            <div class="col-md-10">
+                                <input type="password" #passwordControl="ngModel" [(ngModel)]="password" name="password" class="form-control input-control" [placeholder]="'Mật khẩu phải từ 6 ký tự trở lên'" required minlength="6">
+                                <small *ngIf="passwordControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                                <small *ngIf="passwordControl.errors?.minlength" class="text-muted danger">
+                                    (Mật khẩu phải từ 6 ký tự trở lên)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Nhập lại Mật khẩu</label>
+                            <div class="col-md-10">
+                                <input type="password" #passwordRepeatControl="ngModel" [(ngModel)]="password_repeat" name="password_repeat" class="form-control input-control" [placeholder]="'Nhập lại mật khẩu'" required minlength="6">
+                                <small *ngIf="passwordRepeatControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                                <small *ngIf="passwordRepeatControl.errors?.minlength" class="text-muted danger">
+                                    (Mật khẩu phải từ 6 ký tự trở lên)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Họ</label>
+                            <div class="col-md-10">
+                                <input type="text" #lastNameControl="ngModel" [(ngModel)]="lastName" name="lastName" class="form-control input-control" [placeholder]="'Nhập họ'" required>
+                                <small *ngIf="lastNameControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Tên</label>
+                            <div class="col-md-10">
+                                <input type="text" #firstNameControl="ngModel" [(ngModel)]="firstName" name="firstName" class="form-control input-control" [placeholder]="'Nhập tên'" required>
+                                <small *ngIf="firstNameControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Email</label>
+                            <div class="col-md-10">
+                                <input type="email" #emailControl="ngModel" [(ngModel)]="email" name="email" class="form-control input-control" [placeholder]="'Nhập email'" required>
+                                <small *ngIf="emailControl.errors?.required" class="text-muted danger">
+                                (Không được bỏ trống)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="select">Vai trò/Chức vụ</label>
+                            <div class="col-md-10">
+                                <select #roleNameControl="ngModel" [(ngModel)]="roleName" name="roleName" class="form-control input-control">
+                                    <option value=null [selected]="true" disabled>Chọn vai trò/chức vụ</option>
+                                    <option [value]="role.name" *ngFor="let role of listRoles">{{role.name}}</option>
+                                </select>
+                                <small *ngIf="roleNameControl.value == null" class="text-muted danger">
+                                    (Vui lòng chọn vai trò/chức vụ)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="select">Phòng ban</label>
+                            <div class="col-md-10">
+                                <select #departmentIDControl="ngModel" [(ngModel)]="departmentID" name="departmentID" class="form-control input-control">
+                                    <option value=null [selected]="true" disabled>Chọn phòng ban</option>
+                                    <option [value]="department.id" *ngFor="let department of listDepartments">{{department.name}}</option>
+                                </select>
+                                <small *ngIf="departmentIDControl.value == null" class="text-muted danger">
+                                    (Vui lòng chọn phòng ban)
+                                </small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <button (click)="submitAndNew(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-success ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và tạo mới</button>
+                </div>
+            </div>
+        </div>
+        <!--/.col-->
+    </div>
+</div>

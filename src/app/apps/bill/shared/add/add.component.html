@@ -1,0 +1,85 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <form #itemFrm="ngForm">
+                    <div class="card-header">
+                        <strong>Thông tin</strong>
+                    </div>
+                    <div class="card-block">
+                            <div class="form-group row">
+                                <label class="col-md-2 header-text" for="select">Toà nhà</label>
+                                <div class="col-md-10">
+                                    <select #buildingControl="ngModel" [(ngModel)]="building" name="building" class="form-control input-control" (change)="getListRoomsOfBuilding(building)">
+                                        <option value=null [selected]="true">Chọn toà nhà</option>
+                                        <option [value]="building.id" *ngFor="let building of listBuildings">{{building.name}}</option>
+                                    </select>
+                                    <small *ngIf="buildingControl.value == null" class="text-muted danger">
+                                        (Vui lòng chọn toà nhà)
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 header-text" for="select">Phòng</label>
+                                <div class="col-md-10">
+                                    <select #roomControl="ngModel" [(ngModel)]="room" name="room" class="form-control input-control">
+                                        <option value=null [selected]="true">Chọn phòng</option>
+                                        <option [value]="room.id" *ngFor="let room of listRoomsOfBuilding">{{room.name}}</option>
+                                    </select>
+                                    <small *ngIf="roomControl.value == null" class="text-muted danger">
+                                        (Vui lòng chọn phòng)
+                                    </small>
+                                </div>
+                            </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Ngày bắt đầu ở</label>
+                            <div class="col-md-10">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input type="text"  placeholder="dd/mm/yyyy" class="form-control" [minDate]="minDate" bsDatepicker #appliedDateShowControl="ngModel" [(ngModel)]="appliedDateShow" name="appliedDateShow" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" #start1="bsDatepicker" placement="right" triggers="dblclick:click">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <button class="btn btn-success" (click)="start1.toggle()" [attr.aria-expanded]="start1.isOpen">Chọn ngày bắt đầu ở</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 header-text" for="text-input">Ngày hết hạn</label>
+                            <div class="col-md-10">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input type="text"   placeholder="dd/mm/yyyy"  class="form-control" [minDate]="minDate" bsDatepicker #expirationDateShowControl="ngModel" [(ngModel)]="expirationDateShow" name="expirationDateShow" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" #start="bsDatepicker" placement="right" triggers="dblclick:click">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <button class="btn btn-success" (click)="start.toggle()" [attr.aria-expanded]="start.isOpen">Chọn ngày hết hạn</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header" style="border-top: 1px solid #e1e6ef;">
+                        <strong>Khoản thu</strong>
+                        <button class="btn btn-md button-default-info ml-auto" (click)="addFee()"><i class="fa fa-plus"></i>Thêm khoản thu</button>
+                    </div>
+                    <div class="card-block">
+                        <div class="form-group row" *ngFor="let item of billDatas; let i=index">
+                            <label class="col-md-2 header-text" for="text-input">Khoản thu {{i+1}}</label>
+                            <div class="col-md-10">
+                                <input type="text" [(ngModel)]="billDatas[i].name" name="billDatas{{i}}.name" class="form-control input-control" [placeholder]="'Nhập tên khoản thu'" required style="margin-bottom: 10px">
+                                <input type="text" [(ngModel)]="billDatas[i].number" name="billDatas{{i}}.number" class="form-control input-control" [placeholder]="'Nhập số lượng'" required style="margin-bottom: 10px">
+                                <input type="text" [(ngModel)]="billDatas[i].numberUnit" name="billDatas{{i}}.numberUnit" class="form-control input-control" [placeholder]="'Nhập đơn vị tính số lượng'" required style="margin-bottom: 10px">
+                                <input type="number" [(ngModel)]="billDatas[i].fee" name="billDatas{{i}}.fee" class="form-control input-control" [placeholder]="'Nhập số tiền'" required style="margin-bottom: 10px">
+                                <input type="text" [(ngModel)]="billDatas[i].feeUnit" name="billDatas{{i}}.feeUnit" class="form-control input-control" [placeholder]="'Nhập đơn vị tính'" required >
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="card-footer">
+                    <button (click)="submitAndClose(itemFrm)" *ngIf="!isEdit" class="btn btn-ladda btn-primary ml-auto" data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm và thoát</button>
+                </div>
+            </div>
+        </div>
+        <!--/.col-->
+    </div>
+</div>

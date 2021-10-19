@@ -1,0 +1,169 @@
+<div class="animated fadeIn">
+	<div class="row">
+		<h5 class="col-4">Trạng thái đăng ký loại phòng: <b style="font-size: 19px;">{{statusStudentRoomRegistration ? 'Đang
+				bật' : 'Đang tắt'}}</b></h5>
+		<div class="col-8 ">
+			<div class="pull-right">
+				<button class="btn btn-md button-default-primary ml-auto" (click)="openModalAddPersonalBillRoomTypeRegistration(templateAdd)" ><i
+					 class="fa fa-plus"></i>Tạo
+					hoá đơn đăng ký loại phòng</button>
+				<button class="btn btn-md button-default-danger ml-auto" (click)="enableRegistrations(true)" *ngIf="!statusStudentRoomRegistration"><i
+					 class="fa fa-cog"></i>Mở đăng ký loại phòng</button>
+				<button class="btn btn-md button-default-danger ml-auto" (click)="enableRegistrations(false)" *ngIf="statusStudentRoomRegistration"><i
+					 class="fa fa-cog"></i>Tắt đăng ký loại phòng</button>
+			</div>
+		</div>
+	</div>
+	<div class="table-wrapper">
+		<div class="search-bar">
+			<div class="col-md-9">
+				<form #searchForm="ngForm">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col">
+									<input type="text" class="input-control form-control" placeholder="Số CMND" #idcardControl="ngModel"
+									 [(ngModel)]="idcard" name="idcard">
+								</div>
+								<div class="col">
+									<input type="text" class="input-control form-control" placeholder="Họ" #lastNameControl="ngModel" [(ngModel)]="lastName"
+									 name="lastName">
+								</div>
+								<div class="col">
+									<input type="text" class="input-control form-control" placeholder="Tên" #firstNameControl="ngModel"
+									 [(ngModel)]="firstName" name="firstName">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" style="margin-top: 10px">
+						<div class="col-md-12">
+							<div class="row input-school">
+								<div class="col">
+									<select #schoolControl="ngModel" [(ngModel)]="school" name="school" class="form-control input-control">
+										<option value=null [selected]="true">Trường</option>
+										<option [value]="school.name" *ngFor="let school of listSchools">
+											{{school.name === null ? 'Tất cả' : school.name}}
+										</option>
+									</select>
+								</div>
+								<div class="col">
+									<input type="text" class="input-control form-control" placeholder="Năm bắt đầu" #schoolYearStartControl="ngModel"
+									 [(ngModel)]="schoolYearStart" name="schoolYearStart">
+								</div>
+								<div class="col">
+									<select #verifiedControl="ngModel" [(ngModel)]="verified" name="verified" class="form-control input-control">
+										<option value=null [selected]="true">Trạng thái hồ sơ</option>
+										<option value="null" [selected]="true">Tất cả</option>
+										<option [value]="true">Đã duyệt</option>
+										<option [value]="false">Chưa duyệt</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-3 search-page-button">
+				<div class="row" style="margin-bottom: 10px">
+					<div class="col">
+						<button (click)="searchStudent(searchForm)" class="btn btn-md btn-ladda button-default-primary ml-h" style="width: 100%;"
+						 data-style="expand-right" [ladda]='submitting'><i class="fa fa-search"></i>Tìm kiếm</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<div class="checkbox">
+							<label><input type="checkbox" value="false" name="registered" (change)="changeRegistered($event)">Sinh
+								chưa đăng ký loại phòng</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<data-table id="persons-grid" #itemsTable indexColumnHeader="STT" [items]="items | async" [itemCount]="itemCount"
+		 (reload)="reloadItems($event)" [pagination]="true" [indexColumn]="true" [selectColumn]="true" [multiSelect]="true"
+		 [substituteRows]="false" [selectOnRowClick]="true" [showReloading]="false" (rowClick)="rowClick($event)"
+		 (rowDoubleClick)="rowDoubleClick($event)" [limit]="5">
+			<data-table-column header="Tên đăng nhập">
+				<ng-template #dataTableCell let-item="item">
+					{{item.userName}}
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Họ tên">
+				<ng-template #dataTableCell let-item="item">
+					{{item.lastName}} {{item.firstName}}
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Ngày sinh">
+				<ng-template #dataTableCell let-item="item">
+					{{item.dateOfBirth | utcDate | date:'dd/MM/yyyy'}}
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Trạng thái">
+				<ng-template #dataTableCell let-item="item">
+					<!-- {{item.isEditable ? 'Chưa duyệt' : 'Đã duyệt'}} -->
+					<span class="badge p-h" [ngClass]="{'badge-success': !item.isEditable, 'badge-danger': item.isEditable}">{{item.isEditable ? 'Chưa duyệt' : 'Đã duyệt'}}</span>
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Loại phòng">
+				<ng-template #dataTableCell let-item="item">
+					{{item.roomType}}
+				</ng-template>
+			</data-table-column>
+			<data-table-column header="Loại phòng đăng ký">
+				<ng-template #dataTableCell let-item="item">
+					<select class="form-control input-control" (change)="changeRoomType($event, item)">
+						<option [value]=null [selected]="item.roomType === null" disabled>Chọn loại phòng</option>
+						<option [value]="roomType.id" *ngFor="let roomType of listRoomTypes" [selected]="roomType.id === item.roomType">{{roomType.id}}</option>
+					</select>
+				</ng-template>
+			</data-table-column>
+		</data-table>
+	</div>
+	<div class="clearfix"></div>
+	<div class="row">
+		<div class="col-12" style="margin-top: 20px">
+			<button class="btn btn-md button-default-success ml-auto" [disabled]="!itemsTable.selectedRows.length" (click)="updateRegistrationRoomType()"><i
+				 class="fa fa-check-square-o" aria-hidden="true"></i> Đổi loại phòng cho sinh viên</button>
+			<button class="btn btn-md button-default-primary ml-auto" [disabled]="!itemsTable.selectedRows.length" (click)="verifiedRegistrationRoomType()"
+			 style="margin-right: 10px;"><i class="fa fa-check-square-o" aria-hidden="true"></i> Duyệt đăng ký loại phòng</button>
+			<!-- <button class="btn btn-md button-default-danger ml-auto" (click)="banStudent()" [disabled]="!itemsTable.selectedRows.length"><i
+				 class="fa fa-ban" aria-hidden="true"></i> Khoá tài khoản</button>
+			<button class="btn btn-md button-default-info ml-auto" (click)="unBanStudent()" [disabled]="!itemsTable.selectedRows.length"><i
+				 class="fa fa-ban" aria-hidden="true"></i> Mở khoá tài khoản</button> -->
+		</div>
+	</div>
+</div>
+<ng-template #templateAdd>
+	<div class="modal-header">
+		<h4 id="dialog-sizes-name1" class="modal-title pull-left">Thêm hoá đơn đánh ký loại phòng</h4>
+		<button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<form #AddPersonalBillRoomTypeRegistrationForm="ngForm">
+			<div class="form-group row">
+				<label class="col-md-4 header-text" for="text-input">Ngày bắt đầu ở: </label>
+				<div class="col-md-8">
+					<input type="text" placeholder="dd/mm/yyyy" class="form-control" [minDate]="minDate" bsDatepicker
+					 #appliedDateShowControl="ngModel" [(ngModel)]="appliedDateShow" name="appliedDateShow" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+					 #start="bsDatepicker" placement="right">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-md-4 header-text" for="text-input">Ngày hết hạn: </label>
+				<div class="col-md-8">
+					<input type="text" placeholder="dd/mm/yyyy" class="form-control" [minDate]="minDate" bsDatepicker
+					 #expirationDateShowControl="ngModel" [(ngModel)]="expirationDateShow" name="expirationDateShow" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+					 #start="bsDatepicker" placement="right">
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button (click)="AddPersonalBillRoomTypeRegistration(AddPersonalBillRoomTypeRegistrationForm)" type="button" class="btn btn-primary"
+		 data-style="expand-right" [ladda]='submitting'><i class="fa fa-plus"></i> Thêm</button>
+	</div>
+</ng-template>
